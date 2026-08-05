@@ -10,6 +10,7 @@ final class AppController: ObservableObject {
     let statsStore: StatsStore
     private let clock = SystemClock()
     private var timer: Timer?
+    private let overlay = OverlayController()
 
     init() {
         let config = AppController.loadConfig()
@@ -23,6 +24,9 @@ final class AppController: ObservableObject {
         engine.onBreakSkipped = { [weak self] in
             self?.statsStore.recordSkipped(now: Date())
             self?.refresh()
+        }
+        engine.onStateChange = { [weak self] state in
+            self?.handleStateChange(state)
         }
         startTimer()
         refresh()
@@ -44,7 +48,19 @@ final class AppController: ObservableObject {
 
     private func tick() {
         engine.update()
+        if let kind = engine.currentBreakKind(), case .onBreak = engine.state {
+            overlay.updateCountdown(AppController.mmss(engine.phaseRemaining()), kind: kind, controller: self)
+        }
         refresh()
+    }
+
+    private func handleStateChange(_ state: EngineState) {
+        switch state {
+        case .onBreak(let kind):
+            overlay.show(kind: kind, controller: self)
+        case .working, .paused, .preBreak:
+            overlay.hide()
+        }
     }
 
     private func refresh() {
