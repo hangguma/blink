@@ -12,3 +12,6 @@ xcuserdata/
 
 # SwiftPM
 .build/
+
+# App bundle (build artifact from packaging/make-app.sh)
+Blink.app/
