@@ -11,8 +11,7 @@ struct BlinkApp: App {
         .menuBarExtraStyle(.window)
 
         Settings {
-            // Task 11에서 SettingsView로 교체
-            Text("설정 (준비 중)").padding(40)
+            SettingsView()
         }
     }
 }
