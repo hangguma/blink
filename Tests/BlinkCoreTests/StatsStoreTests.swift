@@ -47,6 +47,22 @@ final class StatsStoreTests: XCTestCase {
         XCTAssertEqual(reloaded.today.breaksCompleted, 0)         // 새 날 → 리셋
     }
 
+    func test_rollover_on_live_instance_past_midnight() {
+        let day1 = Date(timeIntervalSince1970: 0)                 // 1970-01-01
+        let day2 = Date(timeIntervalSince1970: 60 * 60 * 24 * 2)  // 2 days later
+
+        let store = StatsStore(fileURL: tmpURL, now: day1)
+        store.recordCompleted(now: day1)
+        XCTAssertEqual(store.today.breaksCompleted, 1)
+
+        // Same instance survives past midnight; recordCompleted triggers rollover
+        store.recordCompleted(now: day2)
+
+        // rollover() resets to fresh day, then recordCompleted adds 1
+        XCTAssertEqual(store.today.breaksCompleted, 1)
+        XCTAssertEqual(store.today.date, StatsStore.dateKey(for: day2, calendar: .current))
+    }
+
     func test_corrupt_file_starts_empty() {
         try? "garbage".data(using: .utf8)!.write(to: tmpURL)
         let store = StatsStore(fileURL: tmpURL, now: Date(timeIntervalSince1970: 0))
