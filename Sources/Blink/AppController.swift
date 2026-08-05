@@ -51,11 +51,26 @@ final class AppController: ObservableObject {
     }
 
     private func tick() {
+        applyPauseLogic()
         engine.update()
         if let kind = engine.currentBreakKind(), case .onBreak = engine.state {
             overlay.updateCountdown(AppController.mmss(engine.phaseRemaining()), kind: kind, controller: self)
         }
         refresh()
+    }
+
+    private func applyPauseLogic() {
+        let idle = IdleDetector.idleSeconds()
+        switch engine.state {
+        case .working where idle >= config.idleThreshold:
+            engine.pause()                      // 자리 비움 → 정지
+        case .paused where idle < config.idleThreshold:
+            engine.resume()                     // 복귀 → 재개
+        case .preBreak where FullscreenDetector.isFullscreenActive():
+            engine.postponeCurrent()            // 전체화면 앱이면 미룸
+        default:
+            break
+        }
     }
 
     private func handleStateChange(_ state: EngineState) {
