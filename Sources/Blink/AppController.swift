@@ -11,9 +11,11 @@ final class AppController: ObservableObject {
     private let clock = SystemClock()
     private var timer: Timer?
     private let overlay = OverlayController()
+    private let notifier = Notifier()
+    private let config: BreakConfig
 
     init() {
-        let config = AppController.loadConfig()
+        self.config = AppController.loadConfig()
         engine = BreakEngine(config: config, clock: clock)
         statsStore = StatsStore(fileURL: AppController.statsURL(), now: clock.now)
 
@@ -28,6 +30,8 @@ final class AppController: ObservableObject {
         engine.onStateChange = { [weak self] state in
             self?.handleStateChange(state)
         }
+        notifier.controller = self
+        notifier.configure()
         startTimer()
         refresh()
     }
@@ -56,10 +60,20 @@ final class AppController: ObservableObject {
 
     private func handleStateChange(_ state: EngineState) {
         switch state {
-        case .onBreak(let kind):
-            overlay.show(kind: kind, controller: self)
-        case .working, .paused, .preBreak:
+        case .preBreak(let kind):
             overlay.hide()
+            if config.mode(for: kind) == .overlay {
+                notifier.notifyWarning(kind: kind)   // 오버레이 모드는 예고 배너
+            }
+        case .onBreak(let kind):
+            if config.mode(for: kind) == .overlay {
+                overlay.show(kind: kind, controller: self)
+            } else {
+                notifier.notifyBreak(kind: kind, remaining: engine.phaseRemaining())
+            }
+        case .working, .paused:
+            overlay.hide()
+            notifier.clear()
         }
     }
 
