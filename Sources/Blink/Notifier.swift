@@ -9,6 +9,7 @@ final class Notifier: NSObject, UNUserNotificationCenterDelegate {
     static let postponeAction = "BLINK_POSTPONE"
 
     weak var controller: AppController?
+    private(set) var isAuthorized: Bool = false
 
     func configure() {
         let center = UNUserNotificationCenter.current()
@@ -22,7 +23,17 @@ final class Notifier: NSObject, UNUserNotificationCenterDelegate {
             options: []
         )
         center.setNotificationCategories([category])
-        center.requestAuthorization(options: [.alert, .sound]) { _, _ in }
+        center.requestAuthorization(options: [.alert]) { granted, _ in
+            Task { @MainActor in
+                self.isAuthorized = granted
+            }
+        }
+        center.getNotificationSettings { settings in
+            Task { @MainActor in
+                self.isAuthorized = (settings.authorizationStatus == .authorized
+                                      || settings.authorizationStatus == .provisional)
+            }
+        }
     }
 
     func notifyWarning(kind: BreakKind) {

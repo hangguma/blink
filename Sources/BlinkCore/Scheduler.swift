@@ -34,10 +34,15 @@ public final class Scheduler {
     }
 
     /// 미루기: 해당 종류의 다음 발동을 지정 시각으로.
+    /// long을 미루면 short도 함께 밀어야 한다 — 그렇지 않으면 60분 지점에 같이 도래했던
+    /// stale nextShort가 미룬 직후 즉시 다시 발동해 버린다.
     public func postpone(_ kind: BreakKind, until date: Date) {
         switch kind {
-        case .short: nextShort = date
-        case .long: nextLong = date
+        case .short:
+            nextShort = date
+        case .long:
+            nextLong = date
+            nextShort = max(nextShort, date)
         }
     }
 

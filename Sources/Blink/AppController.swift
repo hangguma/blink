@@ -77,11 +77,11 @@ final class AppController: ObservableObject {
         switch state {
         case .preBreak(let kind):
             overlay.hide()
-            if config.mode(for: kind) == .overlay {
+            if effectiveMode(for: kind) == .overlay {
                 notifier.notifyWarning(kind: kind)   // 오버레이 모드는 예고 배너
             }
         case .onBreak(let kind):
-            if config.mode(for: kind) == .overlay {
+            if effectiveMode(for: kind) == .overlay {
                 overlay.show(kind: kind, controller: self)
             } else {
                 notifier.notifyBreak(kind: kind, remaining: engine.phaseRemaining())
@@ -90,6 +90,15 @@ final class AppController: ObservableObject {
             overlay.hide()
             notifier.clear()
         }
+    }
+
+    /// 알림 모드인데 알림 권한이 없으면 오버레이로 폴백 (spec §7).
+    private func effectiveMode(for kind: BreakKind) -> BreakMode {
+        let mode = config.mode(for: kind)
+        if mode == .notification && !notifier.isAuthorized {
+            return .overlay
+        }
+        return mode
     }
 
     private func refresh() {

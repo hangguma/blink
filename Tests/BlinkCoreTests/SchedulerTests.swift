@@ -49,6 +49,20 @@ final class SchedulerTests: XCTestCase {
         XCTAssertEqual(s.dueBreak(at: clock.now), .short)
     }
 
+    func test_postpone_long_also_pushes_stale_short() {
+        let (s, clock) = makeScheduler()
+        clock.advance(by: 60 * 60)
+        XCTAssertEqual(s.dueBreak(at: clock.now), .long)
+
+        s.postpone(.long, until: clock.now.addingTimeInterval(5 * 60))
+
+        // 미룬 직후엔 아무것도 도래하면 안 된다 (stale nextShort도 함께 밀렸어야 함)
+        XCTAssertNil(s.dueBreak(at: clock.now))
+
+        clock.advance(by: 5 * 60)
+        XCTAssertEqual(s.dueBreak(at: clock.now), .long)
+    }
+
     func test_shift_moves_timers_forward() {
         let (s, clock) = makeScheduler()
         clock.advance(by: 20 * 60)
