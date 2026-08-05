@@ -34,7 +34,9 @@ final class AppController: ObservableObject {
 
     private func startTimer() {
         let t = Timer(timeInterval: 1.0, repeats: true) { [weak self] _ in
-            self?.tick()
+            MainActor.assumeIsolated {
+                self?.tick()
+            }
         }
         RunLoop.main.add(t, forMode: .common)
         timer = t
