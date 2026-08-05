@@ -17,16 +17,20 @@ public final class ConfigStore {
         static let marker = "blink.hasConfig"
     }
 
+    private func number(_ key: String, default fallback: Double) -> Double {
+        defaults.object(forKey: key) != nil ? defaults.double(forKey: key) : fallback
+    }
+
     public func load() -> BreakConfig {
         guard defaults.bool(forKey: Key.marker) else { return BreakConfig() }
         var c = BreakConfig()
-        c.shortInterval = defaults.double(forKey: Key.shortInterval)
-        c.shortDuration = defaults.double(forKey: Key.shortDuration)
-        c.longInterval = defaults.double(forKey: Key.longInterval)
-        c.longDuration = defaults.double(forKey: Key.longDuration)
-        c.preBreakWarning = defaults.double(forKey: Key.preBreakWarning)
-        c.idleThreshold = defaults.double(forKey: Key.idleThreshold)
-        c.postponeInterval = defaults.double(forKey: Key.postponeInterval)
+        c.shortInterval = number(Key.shortInterval, default: c.shortInterval)
+        c.shortDuration = number(Key.shortDuration, default: c.shortDuration)
+        c.longInterval = number(Key.longInterval, default: c.longInterval)
+        c.longDuration = number(Key.longDuration, default: c.longDuration)
+        c.preBreakWarning = number(Key.preBreakWarning, default: c.preBreakWarning)
+        c.idleThreshold = number(Key.idleThreshold, default: c.idleThreshold)
+        c.postponeInterval = number(Key.postponeInterval, default: c.postponeInterval)
         c.shortMode = BreakMode(rawValue: defaults.string(forKey: Key.shortMode) ?? "") ?? c.shortMode
         c.longMode = BreakMode(rawValue: defaults.string(forKey: Key.longMode) ?? "") ?? c.longMode
         return c
