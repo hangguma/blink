@@ -80,4 +80,27 @@ final class BreakEngineTests: XCTestCase {
         clock.advance(by: 20 * 60); e.update()
         XCTAssertEqual(seen, [.preBreak(.short)])
     }
+
+    func test_pause_sets_paused_only_from_working() {
+        let (e, clock) = make()
+        e.pause()
+        XCTAssertEqual(e.state, .paused)
+        // preBreak 중엔 pause 무시
+        e.resume()
+        clock.advance(by: 20 * 60); e.update()   // preBreak
+        e.pause()
+        XCTAssertEqual(e.state, .preBreak(.short))
+    }
+
+    func test_idle_pause_freezes_countdown() {
+        let (e, clock) = make()
+        clock.advance(by: 10 * 60)   // 10분 작업
+        e.pause()
+        clock.advance(by: 30 * 60)   // 30분 자리 비움
+        e.resume()
+        e.update()
+        XCTAssertEqual(e.state, .working)          // 정지 동안 카운트 안 감
+        clock.advance(by: 10 * 60); e.update()     // 남은 10분 후 도래
+        XCTAssertEqual(e.state, .preBreak(.short))
+    }
 }
