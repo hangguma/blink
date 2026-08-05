@@ -1,13 +1,8 @@
+import XCTest
 @testable import BlinkCore
 
-// Sanity test: verify scaffold compiles and test infrastructure works
-final class ClockTests {
-    static func test_scaffold_builds() {
-        assert(true, "Scaffold sanity test passed")
+final class ClockTests: XCTestCase {
+    func test_scaffold_builds() {
+        XCTAssertTrue(true)
     }
-
-    // Ensure test runs when module initializes
-    static let _executeTests: Void = {
-        test_scaffold_builds()
-    }()
 }
