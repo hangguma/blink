@@ -8,7 +8,7 @@ struct BlinkApp: App {
         MenuBarExtra {
             MenuContent(controller: delegate.controller)
         } label: {
-            Image(nsImage: BlinkTheme.menuBarIcon)
+            MenuBarLabel(controller: delegate.controller)
         }
         .menuBarExtraStyle(.window)
 
