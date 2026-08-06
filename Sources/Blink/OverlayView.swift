@@ -8,18 +8,48 @@ struct OverlayView: View {
 
     var body: some View {
         ZStack {
-            Color.black.opacity(0.85).ignoresSafeArea()
-            VStack(spacing: 20) {
-                Text(title).font(.system(size: 34, weight: .semibold))
-                Text("20피트(약 6m) 밖을 바라보세요").font(.title3).foregroundStyle(.secondary)
-                Text(countdown).font(.system(size: 64, weight: .bold, design: .rounded)).monospacedDigit()
-                HStack(spacing: 16) {
-                    Button("미루기", action: onPostpone)
-                    Button("건너뛰기", action: onSkip)
+            BlinkTheme.slate.ignoresSafeArea()
+            VStack(spacing: 26) {
+                RingDotIcon()
+                    .frame(width: 36, height: 36)
+                    .foregroundStyle(BlinkTheme.sage.opacity(0.9))
+
+                VStack(spacing: 8) {
+                    Text(title)
+                        .font(.system(size: 22, weight: .medium))
+                        .foregroundStyle(BlinkTheme.mist)
+                    Text("먼 곳을 바라보세요")
+                        .font(.system(size: 15))
+                        .foregroundStyle(BlinkTheme.mist.opacity(0.65))
                 }
-                .controlSize(.large)
+
+                Text(countdown)
+                    .font(.system(size: 72, weight: .light, design: .rounded))
+                    .monospacedDigit()
+                    .foregroundStyle(BlinkTheme.sage)
+
+                HStack(spacing: 12) {
+                    OverlayPill(label: "미루기", action: onPostpone)
+                    OverlayPill(label: "건너뛰기", action: onSkip)
+                }
             }
-            .foregroundStyle(.white)
         }
+    }
+}
+
+private struct OverlayPill: View {
+    let label: String
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            Text(label)
+                .font(.system(size: 14))
+                .foregroundStyle(BlinkTheme.mist)
+                .padding(.horizontal, 18)
+                .padding(.vertical, 8)
+                .overlay(Capsule().stroke(BlinkTheme.hairline, lineWidth: 1))
+        }
+        .buttonStyle(.plain)
     }
 }

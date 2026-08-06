@@ -15,3 +15,7 @@ xcuserdata/
 
 # App bundle (build artifact from packaging/make-app.sh)
 Blink.app/
+
+# Generated app icon (built by packaging/make-icon.sh)
+packaging/AppIcon.icns
+packaging/AppIcon.iconset/

@@ -12,6 +12,10 @@ mkdir -p "$APP/Contents/Resources"
 cp packaging/Info.plist "$APP/Contents/Info.plist"
 cp "$(swift build -c release --show-bin-path)/Blink" "$APP/Contents/MacOS/Blink"
 
+# 앱 아이콘 생성 후 번들에 포함
+bash packaging/make-icon.sh
+cp packaging/AppIcon.icns "$APP/Contents/Resources/AppIcon.icns"
+
 # 로컬 실행용 ad-hoc 서명 (SMAppService 등록에 필요)
 codesign --force --deep --sign - "$APP"
 

@@ -40,6 +40,7 @@ struct SettingsView: View {
                 .font(.footnote).foregroundStyle(.secondary)
         }
         .formStyle(.grouped)
+        .tint(BlinkTheme.sage)
         .frame(width: 380, height: 420)
         .onAppear { hasConfig = true }
         .onDisappear { hasConfig = true }
