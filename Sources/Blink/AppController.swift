@@ -13,6 +13,7 @@ final class AppController: ObservableObject {
     private let overlay = OverlayController()
     private let notifier = Notifier()
     private let config: BreakConfig
+    private var manualBreakPending = false
 
     init() {
         self.config = AppController.loadConfig()
@@ -36,7 +37,10 @@ final class AppController: ObservableObject {
         refresh()
     }
 
-    func breakNow() { engine.startBreakNow() }
+    func breakNow() {
+        manualBreakPending = true   // 수동 브레이크는 항상 오버레이로 (확실히 보이게)
+        engine.startBreakNow()
+    }
 
     func quit() { NSApplication.shared.terminate(nil) }
 
@@ -81,7 +85,9 @@ final class AppController: ObservableObject {
                 notifier.notifyWarning(kind: kind)   // 오버레이 모드는 예고 배너
             }
         case .onBreak(let kind):
-            if effectiveMode(for: kind) == .overlay {
+            let mode: BreakMode = manualBreakPending ? .overlay : effectiveMode(for: kind)
+            manualBreakPending = false
+            if mode == .overlay {
                 overlay.show(kind: kind, controller: self)
             } else {
                 notifier.notifyBreak(kind: kind, remaining: engine.phaseRemaining())

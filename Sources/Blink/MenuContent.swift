@@ -51,5 +51,9 @@ struct MenuContent: View {
         }
         .padding(14)
         .frame(width: 240)
+        .onAppear {
+            // accessory 앱의 팝업이 클릭을 받으려면 앱이 활성 상태여야 한다.
+            NSApplication.shared.activate(ignoringOtherApps: true)
+        }
     }
 }
