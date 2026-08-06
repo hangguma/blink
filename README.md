@@ -1,17 +1,34 @@
 # Blink
 
-macOS 눈 휴식 리마인더 (20-20-20). 메뉴바 앱, 전부 로컬.
+A macOS menu-bar eye-break reminder based on the 20-20-20 rule. Fully local — no account, no cloud, no data leaves your Mac.
 
-## 개발
-- 빌드: `swift build`
-- 테스트: `swift test`
-- 실행(개발): `swift run Blink` (빠른 주기: `BLINK_FAST=1 swift run Blink`)
+## Features
 
-## 설치(.app)
-- `./packaging/make-app.sh` 실행 → `Blink.app` 생성
-- `/Applications`로 이동 후 실행. 메뉴바 눈 아이콘에서 조작.
-- 로그인 시 자동 실행은 설정창 토글(번들 .app에서만 동작).
+- **Two-tier breaks** — a short eye break every 20 minutes and a longer break every 60 minutes (configurable).
+- **Overlay or notification** — each break kind shows a full-screen overlay or a notification banner, your choice. Every break can be skipped or postponed.
+- **Smart pause** — the timer pauses when you step away (idle) and postpones a break while a full-screen app is active.
+- **Menu-bar countdown** — the time until your next break is shown right in the menu bar.
+- **Today's summary** — breaks taken and skipped, kept in a small local file.
+- **Launch at login** — optional, toggled in Settings.
 
-## 구조
-- `BlinkCore` — 순수 로직(상태머신·스케줄러·통계). `swift test` 대상
-- `Blink` — macOS UI(MenuBarExtra·오버레이·알림·감지)
+## Develop
+
+- Build: `swift build`
+- Test: `swift test`
+- Run (dev): `swift run Blink` — for fast iteration use `BLINK_FAST=1 swift run Blink`, which shrinks all intervals to seconds.
+
+## Install (.app)
+
+- Run `./packaging/make-app.sh` to produce `Blink.app`.
+- Move it to `/Applications` and launch it. It runs as a menu-bar app (no Dock icon); control it from the ring icon in the menu bar.
+- Launch-at-login (Settings toggle) only works from the bundled `.app`, not from `swift run`.
+
+## Architecture
+
+- `BlinkCore` — pure logic (state machine, scheduler, stats, config). No AppKit/SwiftUI, fully covered by `swift test`. Kept UI-free so the design can be reused if a Windows port is ever built.
+- `Blink` — the macOS UI layer (MenuBarExtra, NSPanel overlay, notifications, idle/full-screen detection, Settings, launch-at-login).
+
+## Design notes
+
+- Requires macOS 14 (Sonoma) or later. Swift 5.9+, no external dependencies — standard frameworks only.
+- The app icon is generated from code (`packaging/make-icon.swift`, CoreGraphics) — no image assets to maintain.
