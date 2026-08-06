@@ -8,14 +8,13 @@ struct MenuContent: View {
             HStack(spacing: 8) {
                 RingDotIcon()
                     .frame(width: 15, height: 15)
-                    .foregroundStyle(BlinkTheme.sage)
+                    .foregroundStyle(BlinkTheme.accent)
                 Text("다음 브레이크까지")
                     .font(.system(size: 12))
                     .foregroundStyle(.secondary)
                 Spacer()
                 Text(controller.nextBreakText)
-                    .font(.system(size: 13, weight: .medium))
-                    .monospacedDigit()
+                    .font(.system(size: 13, weight: .medium, design: .monospaced))
             }
 
             Text(controller.todayText)
@@ -28,7 +27,7 @@ struct MenuContent: View {
                 Text("지금 쉬기").frame(maxWidth: .infinity)
             }
             .buttonStyle(.borderedProminent)
-            .tint(BlinkTheme.sage)
+            .tint(BlinkTheme.accent)
 
             HStack {
                 SettingsLink { Text("설정…").font(.system(size: 12)) }

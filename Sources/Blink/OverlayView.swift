@@ -8,25 +8,19 @@ struct OverlayView: View {
 
     var body: some View {
         ZStack {
-            BlinkTheme.slate.ignoresSafeArea()
-            VStack(spacing: 26) {
+            BlinkTheme.bg.ignoresSafeArea()
+            VStack(spacing: 24) {
                 RingDotIcon()
-                    .frame(width: 36, height: 36)
-                    .foregroundStyle(BlinkTheme.sage.opacity(0.9))
+                    .frame(width: 34, height: 34)
+                    .foregroundStyle(BlinkTheme.accent)
 
-                VStack(spacing: 8) {
-                    Text(title)
-                        .font(.system(size: 22, weight: .medium))
-                        .foregroundStyle(BlinkTheme.mist)
-                    Text("먼 곳을 바라보세요")
-                        .font(.system(size: 15))
-                        .foregroundStyle(BlinkTheme.mist.opacity(0.65))
-                }
+                Text("\(title) · 먼 곳을 보기")
+                    .font(.system(size: 14, design: .monospaced))
+                    .foregroundStyle(BlinkTheme.muted)
 
                 Text(countdown)
-                    .font(.system(size: 72, weight: .light, design: .rounded))
-                    .monospacedDigit()
-                    .foregroundStyle(BlinkTheme.sage)
+                    .font(.system(size: 76, weight: .light, design: .monospaced))
+                    .foregroundStyle(BlinkTheme.accent)
 
                 HStack(spacing: 12) {
                     OverlayPill(label: "미루기", action: onPostpone)
@@ -44,8 +38,8 @@ private struct OverlayPill: View {
     var body: some View {
         Button(action: action) {
             Text(label)
-                .font(.system(size: 14))
-                .foregroundStyle(BlinkTheme.mist)
+                .font(.system(size: 13, design: .monospaced))
+                .foregroundStyle(BlinkTheme.muted)
                 .padding(.horizontal, 18)
                 .padding(.vertical, 8)
                 .overlay(Capsule().stroke(BlinkTheme.hairline, lineWidth: 1))

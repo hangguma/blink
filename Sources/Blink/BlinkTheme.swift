@@ -12,13 +12,13 @@ extension Color {
     }
 }
 
-/// Horizon 팔레트 — 차분·미니멀 (슬레이트 + 세이지).
+/// Focus 팔레트 — 선명·프로 (니어블랙 + 틸, 모노 타이포).
 enum BlinkTheme {
-    static let slate = Color(hex: 0x233047)     // 오버레이 배경
-    static let sage = Color(hex: 0x86B8A9)      // 액센트 (카운트다운·버튼·아이콘)
-    static let sageInk = Color(hex: 0x1E3229)   // 세이지 위 텍스트
-    static let mist = Color(hex: 0xAEBCCB)      // 슬레이트 위 흐린 텍스트
-    static let hairline = Color(hex: 0x4A5D78)  // 슬레이트 위 얇은 경계
+    static let bg = Color(hex: 0x0E1013)         // 오버레이 배경 (near-black)
+    static let accent = Color(hex: 0x2DD4BF)     // 틸 액센트 (카운트다운·버튼·아이콘)
+    static let accentInk = Color(hex: 0x0B4A43)  // 틸 위 텍스트
+    static let muted = Color(hex: 0x9AA8A6)      // 어두운 배경 위 흐린 텍스트
+    static let hairline = Color(hex: 0x2C3438)   // 얇은 경계
 }
 
 extension BlinkTheme {

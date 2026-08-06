@@ -6,8 +6,8 @@ import UniformTypeIdentifiers
 // Blink 앱 아이콘 생성기 — Horizon 팔레트 + Focus 링/닷.
 // 사용법: swift make-icon.swift <출력 .iconset 디렉터리>
 
-let slate = CGColor(red: 0x2B / 255.0, green: 0x3A / 255.0, blue: 0x55 / 255.0, alpha: 1)
-let sage  = CGColor(red: 0x86 / 255.0, green: 0xB8 / 255.0, blue: 0xA9 / 255.0, alpha: 1)
+let slate = CGColor(red: 0x15 / 255.0, green: 0x18 / 255.0, blue: 0x1C / 255.0, alpha: 1)  // near-black tile
+let sage  = CGColor(red: 0x2D / 255.0, green: 0xD4 / 255.0, blue: 0xBF / 255.0, alpha: 1)  // teal ring
 
 func drawIcon(size: Int, to url: URL) {
     let cs = CGColorSpaceCreateDeviceRGB()
