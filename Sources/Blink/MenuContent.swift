@@ -1,7 +1,9 @@
 import SwiftUI
+import AppKit
 
 struct MenuContent: View {
     @ObservedObject var controller: AppController
+    @Environment(\.openSettings) private var openSettings
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -30,9 +32,13 @@ struct MenuContent: View {
             .tint(BlinkTheme.accent)
 
             HStack {
-                SettingsLink { Text("설정…").font(.system(size: 12)) }
-                    .buttonStyle(.plain)
-                    .foregroundStyle(.secondary)
+                Button("설정…") {
+                    NSApplication.shared.activate(ignoringOtherApps: true)
+                    openSettings()
+                }
+                .buttonStyle(.plain)
+                .font(.system(size: 12))
+                .foregroundStyle(.secondary)
                 Spacer()
                 Button("종료") { controller.quit() }
                     .buttonStyle(.plain)
