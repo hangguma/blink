@@ -33,8 +33,11 @@ struct MenuContent: View {
 
             HStack {
                 Button("설정…") {
-                    NSApplication.shared.activate(ignoringOtherApps: true)
-                    openSettings()
+                    // 팝업이 닫힌 뒤에 열어야 안정적 (동기 호출은 팝업 닫힘에 삼켜짐)
+                    DispatchQueue.main.async {
+                        NSApplication.shared.activate(ignoringOtherApps: true)
+                        openSettings()
+                    }
                 }
                 .buttonStyle(.plain)
                 .font(.system(size: 12))
