@@ -4,6 +4,8 @@ A macOS menu-bar eye-break reminder based on the 20-20-20 rule. Fully local — 
 
 ## Preview
 
+> Design mockups, rendered from the app's actual palette, typography, and layout — not live screenshots.
+
 <p align="center">
   <img src="assets/overlay.png" width="620" alt="Full-screen break overlay"><br>
   <em>Break overlay — look away for a moment, with skip and postpone.</em>
