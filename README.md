@@ -2,6 +2,19 @@
 
 A macOS menu-bar eye-break reminder based on the 20-20-20 rule. Fully local — no account, no cloud, no data leaves your Mac.
 
+## Preview
+
+<p align="center">
+  <img src="assets/overlay.png" width="620" alt="Full-screen break overlay"><br>
+  <em>Break overlay — look away for a moment, with skip and postpone.</em>
+</p>
+
+<p align="center">
+  <img src="assets/menu.png" width="300" alt="Menu-bar popover">
+  &nbsp;&nbsp;&nbsp;
+  <img src="assets/icon.png" width="120" alt="App icon">
+</p>
+
 ## Features
 
 - **Two-tier breaks** — a short eye break every 20 minutes and a longer break every 60 minutes (configurable).
